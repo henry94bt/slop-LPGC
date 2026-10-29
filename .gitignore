@@ -1,0 +1,8 @@
+node_modules/
+.npm-cache/
+dist/
+tools/cache/
+.tmp/
+*.log
+las-palmas-para-compartir.zip
+.DS_Store

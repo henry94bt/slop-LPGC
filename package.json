@@ -1,0 +1,25 @@
+{
+  "name": "slop-las-palmas",
+  "private": true,
+  "version": "1.0.0",
+  "description": "Las Palmas de Gran Canaria · Las Canteras golden-hour city experience built with Three.js",
+  "license": "MIT",
+  "type": "module",
+  "engines": {
+    "node": "^20.19.0 || >=22.12.0"
+  },
+  "scripts": {
+    "dev": "vite --host",
+    "build": "vite build",
+    "preview": "vite preview --host",
+    "fetch:osm": "node tools/fetch-osm.mjs",
+    "bake:osm": "node tools/process-osm.mjs",
+    "assets": "python tools/make-assets.py"
+  },
+  "dependencies": {
+    "three": "^0.183.0"
+  },
+  "devDependencies": {
+    "vite": "^7.1.0"
+  }
+}
