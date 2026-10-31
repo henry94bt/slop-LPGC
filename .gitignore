@@ -7,3 +7,9 @@ tools/cache/
 las-palmas-para-compartir.zip
 .DS_Store
 tools/v2-*.png
+reference/
+pages-test/
+v3/shot*.png
+tools/v3-check.mjs
+tools/nyc-check.mjs
+tools/serve-ref.mjs

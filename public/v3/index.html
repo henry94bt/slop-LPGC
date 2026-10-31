@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="es">
+<head>
+	<meta charset="UTF-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<title>Las Palmas · Prototipo v3</title>
+	<style>
+		* { box-sizing: border-box; }
+		html, body { margin: 0; width: 100%; height: 100%; overflow: hidden; background: #101417; color: #f4ecdf; font-family: Arial, Helvetica, sans-serif; }
+		#scene { position: fixed; inset: 0; width: 100%; height: 100%; display: block; }
+		#hud { position: fixed; left: 22px; top: 18px; z-index: 5; pointer-events: none; }
+		#hud .kicker { font-size: 10px; letter-spacing: .22em; text-transform: uppercase; color: #e8b05e; }
+		#hud h1 { margin: 5px 0 0; font-family: Georgia, serif; font-weight: 400; font-size: 27px; letter-spacing: .01em; }
+		#hud p { margin: 7px 0 0; color: rgba(244,236,223,.62); font-size: 12px; }
+		#loading { position: fixed; inset: 0; z-index: 20; display: grid; place-items: center; background: #101417; transition: opacity .6s ease; }
+		#loading.hidden { opacity: 0; pointer-events: none; }
+		#loading .inner { text-align: center; }
+		#loading .badge { width: 54px; height: 54px; margin: 0 auto 16px; border-radius: 50%; background: #e8b05e; color: #172126; display: grid; place-items: center; font-weight: 900; letter-spacing: -.05em; }
+		#loading h2 { margin: 0; font-family: Georgia, serif; font-weight: 400; font-size: 26px; }
+		#loading p { margin: 10px 0 0; color: rgba(244,236,223,.55); font-size: 12px; }
+		#error { position: fixed; inset: auto 20px 20px; z-index: 30; padding: 14px 18px; border: 1px solid #9b3a30; background: #241b1a; color: #ffd9cc; font-size: 13px; display: none; white-space: pre-wrap; }
+	</style>
+	<script type="importmap">
+		{
+			"imports": {
+				"three": "https://cdn.jsdelivr.net/gh/mrdoob/three.js@b3396270682287470d161658ac01084d25e8dba6/build/three.webgpu.js",
+				"three/webgpu": "https://cdn.jsdelivr.net/gh/mrdoob/three.js@b3396270682287470d161658ac01084d25e8dba6/build/three.webgpu.js",
+				"three/tsl": "https://cdn.jsdelivr.net/gh/mrdoob/three.js@b3396270682287470d161658ac01084d25e8dba6/build/three.tsl.js",
+				"three/addons/": "https://cdn.jsdelivr.net/gh/mrdoob/three.js@b3396270682287470d161658ac01084d25e8dba6/examples/jsm/"
+			}
+		}
+	</script>
+</head>
+<body>
+	<canvas id="scene"></canvas>
+	<div id="hud">
+		<div class="kicker">Las Palmas · Prototipo de manzana</div>
+		<h1>Las Canteras, calle interior</h1>
+		<p>WebGPU · TSL · materiales y detalles de slop-newyork</p>
+	</div>
+	<div id="loading">
+		<div class="inner">
+			<div class="badge">LP</div>
+			<h2>Montando la manzana</h2>
+			<p id="loading-status">Iniciando WebGPU…</p>
+		</div>
+	</div>
+	<div id="error"></div>
+	<script type="module" src="./main.js"></script>
+</body>
+</html>
