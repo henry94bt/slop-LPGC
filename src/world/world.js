@@ -9,6 +9,12 @@ import { createAuditorio } from './auditorio.js';
 import { createReef } from './reef.js';
 import { createBeachProps } from './beach-props.js';
 import { createFurniture } from './furniture.js';
+import { createBusStops, createFacadeAds, createPromenadeMupis, createLocalBoards } from './street-ads.js';
+import { createTraffic } from './traffic.js';
+import { createCrowd } from './crowd.js';
+import { createTrees } from './trees.js';
+import { createPlanters } from './planters.js';
+import { createShopSigns } from './shop-signs.js';
 
 function polylineLength( points ) {
 
@@ -268,6 +274,72 @@ export function buildWorld( { data, renderer, scene, preset, textures, castShado
 	} );
 	scene.add( furniture.group );
 
+	const planters = createPlanters( {
+		promenade: terrain.promenade,
+		pointAlong: terrain.pointAlong,
+		coastField: terrain.coastField,
+		castShadows
+	} );
+	scene.add( planters );
+
+	const shopSigns = createShopSigns( {
+		data,
+		coastField: terrain.coastField
+	} );
+	scene.add( shopSigns );
+
+	// ---------- paradas de guagua y publicidad de fachada ----------
+
+	const busStops = createBusStops( {
+		data,
+		textures,
+		coastField: terrain.coastField,
+		castShadows
+	} );
+	scene.add( busStops );
+
+	const facadeAds = createFacadeAds( {
+		textures,
+		pointAlong: terrain.pointAlong,
+		promenade: terrain.promenade,
+		coastField: terrain.coastField
+	} );
+	scene.add( facadeAds );
+
+	const mupis = createPromenadeMupis( {
+		textures,
+		pointAlong: terrain.pointAlong,
+		promenade: terrain.promenade,
+		coastField: terrain.coastField
+	} );
+	scene.add( mupis );
+
+	const localBoards = createLocalBoards( {
+		textures,
+		pointAlong: terrain.pointAlong,
+		promenade: terrain.promenade,
+		coastField: terrain.coastField
+	} );
+	scene.add( localBoards );
+
+	// ---------- tráfico y gente ----------
+
+	const trees = createTrees( {
+		data,
+		coastField: terrain.coastField,
+		castShadows
+	} );
+	scene.add( trees );
+
+	const traffic = createTraffic( {
+		data,
+		coastField: terrain.coastField,
+		castShadows
+	} );
+	scene.add( traffic );
+
+	let elapsed = 0;
+
 	// ---------- posiciones ----------
 
 	function promenadeSpot( t, offset = 0 ) {
@@ -285,9 +357,21 @@ export function buildWorld( { data, renderer, scene, preset, textures, castShado
 
 	}
 
+	function inCityGround( x, z ) {
+
+		return ( data.cityGround || [] ).some( rect => x > rect.minX && x < rect.maxX && z > rect.minZ && z < rect.maxZ );
+
+	}
+
+	function groundOk( x, z, margin = 3 ) {
+
+		return inCityGround( x, z ) || terrain.coastField.isLand( x, z, margin );
+
+	}
+
 	function clearSpot( x, z, radius = 1.2 ) {
 
-		if ( ! blocked( x, z, radius ) && terrain.coastField.isLand( x, z, 3 ) ) return { x, z, adjusted: false };
+		if ( ! blocked( x, z, radius ) && groundOk( x, z, 3 ) ) return { x, z, adjusted: false };
 
 		for ( let ring = 1; ring <= 10; ring ++ ) {
 
@@ -299,7 +383,7 @@ export function buildWorld( { data, renderer, scene, preset, textures, castShado
 				const nx = x + Math.cos( angle ) * distance;
 				const nz = z + Math.sin( angle ) * distance;
 
-				if ( ! blocked( nx, nz, radius ) && terrain.coastField.isLand( nx, nz, 3 ) ) return { x: nx, z: nz, adjusted: true };
+				if ( ! blocked( nx, nz, radius ) && groundOk( nx, nz, 3 ) ) return { x: nx, z: nz, adjusted: true };
 
 			}
 
@@ -326,6 +410,16 @@ export function buildWorld( { data, renderer, scene, preset, textures, castShado
 		z: kayakBase.z - kayakBase.nz * CITY.kayak.offshore,
 		yaw: Math.atan2( - ( kayakAhead.x - kayakBase.x ), - ( kayakAhead.z - kayakBase.z ) ) - 0.62
 	};
+
+	const crowd = createCrowd( {
+		data,
+		promenade: terrain.promenade,
+		pointAlong: terrain.pointAlong,
+		coastField: terrain.coastField,
+		spawn,
+		castShadows
+	} );
+	scene.add( crowd.group );
 
 	function resolvePlace( name ) {
 
@@ -401,6 +495,9 @@ export function buildWorld( { data, renderer, scene, preset, textures, castShado
 
 		if ( Math.hypot( x - CITY.landmark.x, z - CITY.landmark.z ) < 165 ) return 'Auditorio Alfredo Kraus';
 		if ( distanceToPromenade( x, z ) < 34 ) return 'Paseo de Las Canteras';
+		if ( x > 1800 && z > 1800 ) return 'Vegueta · Triana';
+		if ( z > 1200 ) return 'Ciudad Jardín';
+		if ( x > 2400 && z < 1200 ) return 'Puerto · La Isleta';
 
 		const mesa = CITY.zones.find( zone => zone.id === 'mesa' );
 		if ( mesa && Math.hypot( x - mesa.x, z - mesa.z ) < mesa.radius ) return 'Av. José Mesa y López';
@@ -412,7 +509,7 @@ export function buildWorld( { data, renderer, scene, preset, textures, castShado
 
 	function walkable( x, z ) {
 
-		return terrain.coastField.isLand( x, z, 0.9 ) && ! blocked( x, z, 0.5 );
+		return groundOk( x, z, 0.9 ) && ! blocked( x, z, 0.5 );
 
 	}
 
@@ -431,6 +528,15 @@ export function buildWorld( { data, renderer, scene, preset, textures, castShado
 		landmark,
 		reef,
 		sites,
+		trees,
+		planters,
+		shopSigns,
+		traffic,
+		crowd,
+		busStops,
+		facadeAds,
+		mupis,
+		localBoards,
 		spawn,
 		kayakSpawn,
 		blocked,
@@ -442,8 +548,10 @@ export function buildWorld( { data, renderer, scene, preset, textures, castShado
 		insideLandmark,
 		update( delta ) {
 
+			elapsed += delta;
 			terrain.update( delta );
 			palms.update( delta );
+			crowd.update( delta, elapsed );
 
 		},
 		setLighting( next ) {

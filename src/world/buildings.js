@@ -1,16 +1,18 @@
 import * as THREE from 'three';
 
 const PALETTE = [
-	0xd8c9b5,
-	0xcdb69e,
-	0xe4d5c1,
-	0xbe8f73,
+	0xe8ded1,
+	0xd9c3a5,
+	0xf0e6d6,
+	0xc48b6a,
 	0xd5a58b,
-	0xc4b29e,
-	0xb4a794,
-	0x9faeaa,
+	0xb9875e,
+	0xcf7863,
+	0x9fb0a4,
 	0xe0cbb2,
-	0xc9a98b
+	0xb85f4a,
+	0xc9a98b,
+	0x8e9c8f
 ];
 
 function signedArea( poly ) {
@@ -150,10 +152,33 @@ const windowShader = {
 				shop *= wallMask * ( 1.0 - smoothstep( 3.4, 4.4, vWPos.y ) );
 
 				float opening = max( win, shop * 0.85 );
-				diffuseColor.rgb = mix( diffuseColor.rgb, vec3( 0.035, 0.05, 0.058 ), opening * 0.82 );
+				vec3 glass = mix( vec3( 0.025, 0.04, 0.05 ), vec3( 0.18, 0.27, 0.31 ), smoothstep( 0.14, 0.9, cell.y ) * 0.75 + 0.18 );
+				diffuseColor.rgb = mix( diffuseColor.rgb, glass, opening * 0.9 );
 
-				float floorLine = smoothstep( 0.0, 0.025, abs( fract( facadeUv.y / 3.05 ) - 0.02 ) );
-				diffuseColor.rgb *= 1.0 - 0.05 * wallMask * ( 1.0 - floorLine );
+				// marco y alféizar de las ventanas
+				float frameX = smoothstep( 0.12, 0.16, cell.x ) * ( 1.0 - smoothstep( 0.20, 0.24, cell.x ) );
+				frameX += smoothstep( 0.76, 0.80, cell.x ) * ( 1.0 - smoothstep( 0.84, 0.88, cell.x ) );
+				float frameY = smoothstep( 0.16, 0.20, cell.y ) * ( 1.0 - smoothstep( 0.24, 0.28, cell.y ) );
+				frameY += smoothstep( 0.74, 0.78, cell.y ) * ( 1.0 - smoothstep( 0.82, 0.86, cell.y ) );
+				float frame = clamp( frameX + frameY, 0.0, 1.0 ) * wallMask;
+				diffuseColor.rgb = mix( diffuseColor.rgb, vec3( 0.72, 0.65, 0.54 ), frame * 0.28 );
+
+				float sill = ( 1.0 - smoothstep( 0.0, 0.035, abs( cell.y - 0.185 ) ) ) * wallMask;
+				diffuseColor.rgb += vec3( 0.045, 0.035, 0.025 ) * sill;
+
+				// toldos de los locales
+				float awning = wallMask * smoothstep( 2.95, 3.10, vWPos.y ) * ( 1.0 - smoothstep( 3.55, 3.75, vWPos.y ) );
+				float awningHash = facadeHash( cellId * 0.37 + 3.0 );
+				vec3 awningColor = mix( vec3( 0.48, 0.13, 0.10 ), vec3( 0.16, 0.30, 0.22 ), step( 0.52, awningHash ) );
+				awningColor = mix( awningColor, vec3( 0.76, 0.57, 0.27 ), step( 0.82, awningHash ) );
+				diffuseColor.rgb = mix( diffuseColor.rgb, awningColor, awning * 0.86 );
+
+				// línea de forjado y sombra bajo el balcón
+				float floorCoord = facadeUv.y / 3.05;
+				float floorFrac = fract( floorCoord );
+				float slab = ( 1.0 - smoothstep( 0.02, 0.10, abs( floorFrac - 0.06 ) ) ) * wallMask;
+				diffuseColor.rgb = mix( diffuseColor.rgb, diffuseColor.rgb * 0.62, slab * 0.55 );
+				diffuseColor.rgb *= 1.0 - 0.055 * wallMask * ( 1.0 - smoothstep( 0.0, 0.08, abs( floorFrac - 0.02 ) ) );
 			` )
 			.replace( '#include <emissivemap_fragment>', `#include <emissivemap_fragment>
 				float litCell = step( 0.82, facadeHash( cellId + vec2( floor( vWPos.y / 3.05 ), 0.0 ) ) );

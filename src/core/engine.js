@@ -2,6 +2,8 @@ import * as THREE from 'three';
 import { EffectComposer } from 'three/addons/postprocessing/EffectComposer.js';
 import { RenderPass } from 'three/addons/postprocessing/RenderPass.js';
 import { UnrealBloomPass } from 'three/addons/postprocessing/UnrealBloomPass.js';
+import { SSAOPass } from 'three/addons/postprocessing/SSAOPass.js';
+import { SMAAPass } from 'three/addons/postprocessing/SMAAPass.js';
 import { OutputPass } from 'three/addons/postprocessing/OutputPass.js';
 
 export function createEngine( canvas ) {
@@ -28,9 +30,9 @@ export function createEngine( canvas ) {
 	renderer.info.autoReset = true;
 
 	const scene = new THREE.Scene();
-	scene.fog = new THREE.Fog( 0xe5a274, 480, 4300 );
+	scene.fog = new THREE.Fog( 0xe5a274, 550, 9800 );
 
-	const camera = new THREE.PerspectiveCamera( 64, window.innerWidth / window.innerHeight, 0.08, 16000 );
+	const camera = new THREE.PerspectiveCamera( 64, window.innerWidth / window.innerHeight, 0.08, 30000 );
 	camera.position.set( 0, 2, 0 );
 
 	const composer = new EffectComposer( renderer );
@@ -47,13 +49,28 @@ export function createEngine( canvas ) {
 	const renderPass = new RenderPass( scene, camera );
 	composer.addPass( renderPass );
 
+	let ssaoPass = null;
+
+	if ( ! lowPower ) {
+
+		ssaoPass = new SSAOPass( scene, camera, window.innerWidth, window.innerHeight );
+		ssaoPass.kernelRadius = 10;
+		ssaoPass.minDistance = 0.002;
+		ssaoPass.maxDistance = 0.09;
+		composer.addPass( ssaoPass );
+
+	}
+
 	const bloomPass = new UnrealBloomPass(
 		new THREE.Vector2( window.innerWidth, window.innerHeight ),
-		0.52,
-		0.62,
-		0.82
+		0.34,
+		0.48,
+		0.9
 	);
 	composer.addPass( bloomPass );
+
+	const smaaPass = new SMAAPass( window.innerWidth, window.innerHeight );
+	composer.addPass( smaaPass );
 	composer.addPass( new OutputPass() );
 
 	function resize() {
@@ -65,6 +82,8 @@ export function createEngine( canvas ) {
 		renderer.setSize( width, height );
 		composer.setSize( width, height );
 		bloomPass.resolution.set( width, height );
+		if ( ssaoPass ) ssaoPass.setSize( width, height );
+		smaaPass.setSize( width, height );
 
 	}
 

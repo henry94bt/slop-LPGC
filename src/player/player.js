@@ -284,6 +284,14 @@ export function createPlayer( { world, camera, ocean, input, scene } ) {
 
 	}
 
+	function setPose( x, z, yaw = 0, pitch = 0 ) {
+
+		setMode( 'walk', { x, z, yaw } );
+		walk.pitch = pitch;
+		return true;
+
+	}
+
 	function updateWalk( delta ) {
 
 		const axis = input.getMoveAxis();
@@ -322,10 +330,10 @@ export function createPlayer( { world, camera, ocean, input, scene } ) {
 
 		const radius = Math.hypot( walk.pos.x, walk.pos.z );
 
-		if ( radius > 2300 ) {
+		if ( radius > 6200 ) {
 
-			walk.pos.x *= 2300 / radius;
-			walk.pos.z *= 2300 / radius;
+			walk.pos.x *= 6200 / radius;
+			walk.pos.z *= 6200 / radius;
 
 		}
 
@@ -480,6 +488,7 @@ export function createPlayer( { world, camera, ocean, input, scene } ) {
 		update,
 		setMode,
 		teleport,
+		setPose,
 		setLook( yaw, pitch = 0 ) {
 
 			if ( mode === 'walk' ) {

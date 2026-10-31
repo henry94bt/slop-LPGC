@@ -1,7 +1,7 @@
 import { BRANDS } from '../config/city.js';
 
-const EXTENT = 2500;
-const STATIC_SIZE = 1400;
+const EXTENT = 7000;
+const STATIC_SIZE = 2600;
 const STATIC_SCALE = STATIC_SIZE / ( EXTENT * 2 );
 
 function pathPolygon( ctx, poly, close = true ) {
@@ -25,12 +25,12 @@ function drawLabel( ctx, text, x, z, color = 'rgba(245,235,220,0.72)' ) {
 
 	ctx.save();
 	ctx.fillStyle = color;
-	ctx.font = '600 9px Arial, sans-serif';
+	ctx.font = '600 8px Arial, sans-serif';
 	ctx.textAlign = 'center';
 	const px = ( x + EXTENT ) * STATIC_SCALE;
 	const py = ( z + EXTENT ) * STATIC_SCALE;
 	const chars = [ ...text ];
-	const width = chars.reduce( ( acc, c ) => acc + ctx.measureText( c ).width + 1.4, 0 );
+	const width = chars.reduce( ( acc, c ) => acc + ctx.measureText( c ).width + 1.1, 0 );
 	let cx = px - width / 2;
 
 	for ( const c of chars ) {
@@ -53,6 +53,19 @@ function buildStaticMap( data, sites ) {
 
 	ctx.fillStyle = '#081820';
 	ctx.fillRect( 0, 0, STATIC_SIZE, STATIC_SIZE );
+
+	// base urbana de la ciudad ampliada
+	ctx.fillStyle = '#263230';
+	for ( const rect of ( data.cityGround || [] ) ) {
+
+		ctx.fillRect(
+			( rect.minX + EXTENT ) * STATIC_SCALE,
+			( rect.minZ + EXTENT ) * STATIC_SCALE,
+			( rect.maxX - rect.minX ) * STATIC_SCALE,
+			( rect.maxZ - rect.minZ ) * STATIC_SCALE
+		);
+
+	}
 
 	// tierra
 	pathPolygon( ctx, data.land );
@@ -151,6 +164,9 @@ function buildStaticMap( data, sites ) {
 	drawLabel( ctx, 'LAS CANTERAS', 690, - 1480 );
 	drawLabel( ctx, 'GUANARTEME', 130, - 250 );
 	drawLabel( ctx, 'LA BARRA', 520, - 1385, 'rgba(140, 214, 220, 0.65)' );
+	drawLabel( ctx, 'LA ISLETA', 1100, - 4300 );
+	drawLabel( ctx, 'CIUDAD JARDÍN', 2300, 1700 );
+	drawLabel( ctx, 'VEGUETA · TRIANA', 3300, 2850 );
 
 	// vallas
 	for ( const site of sites ) {

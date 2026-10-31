@@ -18,14 +18,14 @@ export const CITIES = {
 		centerLabel: '28°07′38″ N · 15°26′48″ W',
 		timezone: 'Atlantic/Canary',
 		defaultLighting: 'golden-hour',
-		worldRadius: 2350,
+		worldRadius: 6200,
 		spawn: {
 			anchor: 'promenade',
 			t: 0.18,
 			offset: 0,
 			eyeHeight: 1.72,
 			lookAhead: 0.08,
-			lookOffset: 0.45,
+			lookOffset: 0.52,
 			pitch: - 0.02
 		},
 		kayak: {
@@ -38,7 +38,8 @@ export const CITIES = {
 			auditorio: { mode: 'walk', anchor: 'auditorio', x: - 92, z: - 286, lookAt: [ - 217, - 333 ] },
 			paseo: { mode: 'walk', anchor: 'promenade', t: 0.34, offset: 3 },
 			barra: { mode: 'kayak', anchor: 'promenade', t: 0.5, offshore: 255 },
-			guanarteme: { mode: 'walk', x: 585, z: - 250, lookAt: [ 585, - 700 ] }
+			guanarteme: { mode: 'walk', x: 585, z: - 250, lookAt: [ 585, - 700 ] },
+			vegueta: { mode: 'walk', x: 3091, z: 2574, lookAt: [ 3193, 2682 ] }
 		},
 		zones: [
 			{ id: 'auditorio', name: 'Auditorio Alfredo Kraus', x: - 217, z: - 333, radius: 150 },
@@ -67,7 +68,7 @@ export const LIGHTING_PRESETS = {
 		sun: { elevation: 7.5, azimuth: 310, color: 0xffb26a, intensity: 5.1 },
 		hemi: { sky: 0xffd3ad, ground: 0x7a5843, intensity: 0.8 },
 		fill: { color: 0x7f9dc9, intensity: 0.28, elevation: 24, azimuth: 120 },
-		fog: { color: 0xe3a071, near: 340, far: 3800 },
+		fog: { color: 0xe3a071, near: 550, far: 9800 },
 		exposure: 1.1,
 		sky: {
 			top: 0x2c4a74,
@@ -95,7 +96,7 @@ export const LIGHTING_PRESETS = {
 		sun: { elevation: - 2.4, azimuth: 302, color: 0xff9a78, intensity: 0.55 },
 		hemi: { sky: 0x7d9cc4, ground: 0x252a34, intensity: 0.62 },
 		fill: { color: 0x9db9d9, intensity: 0.3, elevation: 32, azimuth: 90 },
-		fog: { color: 0x5c7293, near: 400, far: 3400 },
+		fog: { color: 0x5c7293, near: 500, far: 8500 },
 		exposure: 1.15,
 		sky: {
 			top: 0x142640,
@@ -123,7 +124,7 @@ export const LIGHTING_PRESETS = {
 		sun: { elevation: 28, azimuth: 135, color: 0x9fb9df, intensity: 0.32 },
 		hemi: { sky: 0x314a73, ground: 0x10131a, intensity: 0.28 },
 		fill: { color: 0x5d7ba8, intensity: 0.14, elevation: 40, azimuth: 300 },
-		fog: { color: 0x0e1b2a, near: 350, far: 2700 },
+		fog: { color: 0x0e1b2a, near: 450, far: 6500 },
 		exposure: 1.32,
 		sky: {
 			top: 0x040a15,
@@ -180,12 +181,16 @@ export const BRANDS = {
  * principales. Las anclas se resuelven contra la geometría real de la ciudad.
  */
 export const BILLBOARD_SITES = [
-	{ brand: 'pepa', anchor: 'promenade', t: 0.215, offset: - 4, width: 12, facing: 'path-back' },
+	{ brand: 'hbtdata', anchor: 'promenade', t: 0.215, offset: - 4, width: 12, facing: 'path-back' },
 	{ brand: 'hbtdata', anchor: 'promenade', t: 0.48, offset: - 4, width: 11.2, facing: 'path-back' },
-	{ brand: 'abretusobre', anchor: 'promenade', t: 0.74, offset: - 4, width: 11.2, facing: 'path-back' },
+	{ brand: 'hbtdata', anchor: 'promenade', t: 0.74, offset: - 4, width: 11.2, facing: 'path-back' },
+	{ brand: 'abretusobre', anchor: 'promenade', t: 0.32, offset: - 4, width: 10.8, facing: 'path-back' },
+	{ brand: 'abretusobre', anchor: 'promenade', t: 0.60, offset: - 4, width: 10.8, facing: 'path-back' },
 	{ brand: 'hbtdata', anchor: 'street', street: 'Avenida José Mesa y López', t: 0.36, offset: 9.5, width: 10.5 },
 	{ brand: 'pepa', anchor: 'street', street: 'Calle Fernando Guanarteme', t: 0.55, offset: 9, width: 10 },
-	{ brand: 'abretusobre', anchor: 'street', street: 'Avenida José Mesa y López', t: 0.66, offset: 9.5, width: 10.5 }
+	{ brand: 'abretusobre', anchor: 'street', street: 'Avenida José Mesa y López', t: 0.66, offset: 9.5, width: 10.5 },
+	{ brand: 'hbtdata', anchor: 'street', street: 'Calle Juan Rejón', t: 0.34, offset: 9, width: 10 },
+	{ brand: 'abretusobre', anchor: 'street', street: 'Calle León y Castillo', t: 0.55, offset: 9, width: 10 }
 ];
 
 export const WAYPOINTS = {

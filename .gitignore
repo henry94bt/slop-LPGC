@@ -6,3 +6,4 @@ tools/cache/
 *.log
 las-palmas-para-compartir.zip
 .DS_Store
+tools/v2-*.png

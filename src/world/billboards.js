@@ -1,5 +1,6 @@
 import * as THREE from 'three';
 import { BRANDS } from '../config/city.js';
+import { AD_CREATIVES } from '../config/ads.js';
 import { glowTexture } from '../utils/textures.js';
 import { assetUrl } from '../utils/assets.js';
 
@@ -8,8 +9,12 @@ export async function loadBillboardTextures( renderer ) {
 	const loader = new THREE.TextureLoader();
 	const anisotropy = renderer.capabilities.getMaxAnisotropy();
 	const textures = {};
+	const entries = [
+		...Object.entries( BRANDS ).map( ( [ id, item ] ) => [ id, item ] ),
+		...Object.entries( AD_CREATIVES ).map( ( [ id, item ] ) => [ id, item ] )
+	];
 
-	await Promise.all( Object.entries( BRANDS ).map( async ( [ id, brand ] ) => {
+	await Promise.all( entries.map( async ( [ id, brand ] ) => {
 
 		const texture = await loader.loadAsync( assetUrl( brand.texture ) );
 		texture.colorSpace = THREE.SRGBColorSpace;

@@ -200,7 +200,8 @@ async function boot() {
 			auditorio: 'Auditorio Alfredo Kraus',
 			paseo: 'Paseo de Las Canteras',
 			barra: 'La Barra · kayak',
-			guanarteme: 'Guanarteme'
+			guanarteme: 'Guanarteme',
+			vegueta: 'Vegueta · Triana'
 		};
 
 		hud.toast( names[ place ] || place );
@@ -226,6 +227,7 @@ async function boot() {
 		else if ( event.code === 'Digit2' ) handlePlace( 'paseo' );
 		else if ( event.code === 'Digit3' ) handlePlace( 'barra' );
 		else if ( event.code === 'Digit4' ) handlePlace( 'guanarteme' );
+		else if ( event.code === 'Digit5' ) handlePlace( 'vegueta' );
 
 	} );
 

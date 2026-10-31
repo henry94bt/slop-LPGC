@@ -54,7 +54,7 @@ No hace falta cambiar el nombre del repositorio: `vite.config.js` genera la buil
 | Cambiar a pie / kayak | `K` o los botones inferiores |
 | Cambiar iluminación | `L` (Golden hour → Hora azul → Noche) |
 | Sonido ambiente | `M` o el botón «Sonido» |
-| Ir a un punto | `1` Auditorio · `2` Paseo · `3` La Barra · `4` Guanarteme |
+| Ir a un punto | `1` Auditorio · `2` Paseo · `3` La Barra · `4` Guanarteme · `5` Vegueta |
 
 En móvil: desliza en la mitad izquierda para avanzar y en la derecha para mirar. La brújula y el minimapa orientan la exploración.
 
@@ -64,8 +64,11 @@ En móvil: desliza en la mitad izquierda para avanzar y en la derecha para mirar
 - **Golden hour canario** por defecto: sol bajo sobre el Atlántico, sombras largas, niebla cálida, cielo procedural, océano con destellos y un *bloom* contenido. Hay dos presets extra (`blue-hour`, `noche`) con techo, ventanas y vallas actualizados.
 - **Vallas retroiluminadas** de La Pepa Studio, HBTDATA y AbretuSobre.es. Los logos se generan en `public/assets/` a partir de los materiales originales de `Public assets/` y se aplican a paneles `MeshStandardMaterial` con `emissiveMap` + `PointLight` + *bloom*.
 - **Modo kayak** en la bahía de Las Canteras: física simple de palada, cabeceo con las olas, cámara en tercera persona, palista y estela en el agua. Se entra con `K` o con el botón «Kayak».
-- **Vegetación procedural**: 226 palmeras canarias con troncos curvos, coronas de frondas, dátiles y balanceo por shader, distribuidas por el paseo, parques y la avenida principal.
-- **Ciudad OSM real**: 9.141 huellas de edificios, 2.658 tramos de viario, playas, parques, costa y paseo marítimo. La geometría se hornea desde la API de OSM y se sirve en `public/data/las-palmas.json`.
+- **Ciudad OSM ampliada**: 21.825 huellas de edificios y 8.745 tramos de viario desde La Isleta hasta Vegueta, con base urbana para toda la ciudad. La geometría se hornea desde la API de OSM y se sirve en `public/data/las-palmas.json`.
+- **Calle y vida urbana**: fachadas con toldos, marcos y forjados; 190 árboles; 260 coches; 170 personas (algunas paseando); jardineras, rótulos comerciales y mobiliario.
+- **Paradas de guagua y publicidad local**: 8 paradas con marquesina, banco, señal de línea y mupi de HBTDATA/AbretuSobre.es; vallas y mupis en el paseo; creatividades canarias de gofio, guagua, mojo, plátano, calima y sobremesa.
+- **Postprocesado**: SSAO, SMAA y bloom contenido para dar profundidad a la ciudad.
+- **Vegetación procedural**: 226 palmeras canarias con troncos curvos, coronas de frondas, dátiles y balanceo por shader, más árboles de calle.
 - **Auditorio Alfredo Kraus** estilizado como pieza de referencia, con plaza, vidrio curvo, cubierta blanca y rótulo.
 - **Vida en la playa**: 90+ sombrillas instanciadas, toallas, bañistas, torres de socorrista, La Barra (arrecife) y mobiliario del paseo.
 - **HUD** en español con reloj, zona actual, minimapa, telemetría, ayuda contextual, pantalla de carga y sonido ambiente sintetizado (oleaje y gaviotas).

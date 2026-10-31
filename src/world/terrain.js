@@ -315,9 +315,37 @@ export function buildTerrain( data ) {
 
 	// ---------- suelo ----------
 
+	const urbanMap = urbanTexture();
+
+	// base urbana para la ciudad ampliada (evita que queden islas flotando)
+	const cityGround = Array.isArray( data.cityGround ) ? data.cityGround : ( data.cityGround ? [ data.cityGround ] : [] );
+
+	for ( const rect of cityGround ) {
+
+		const w = rect.maxX - rect.minX;
+		const d = rect.maxZ - rect.minZ;
+		if ( w <= 0 || d <= 0 ) continue;
+		const map = urbanMap.clone();
+		map.needsUpdate = true;
+		map.wrapS = map.wrapT = THREE.RepeatWrapping;
+		map.repeat.set( w / 22, d / 22 );
+		const geo = new THREE.PlaneGeometry( w, d );
+		geo.rotateX( - Math.PI / 2 );
+		const mesh = new THREE.Mesh( geo, new THREE.MeshStandardMaterial( {
+			map,
+			color: 0xd8c7b2,
+			roughness: 0.98,
+			metalness: 0
+		} ) );
+		mesh.position.set( ( rect.minX + rect.maxX ) / 2, - 0.06, ( rect.minZ + rect.maxZ ) / 2 );
+		mesh.receiveShadow = true;
+		mesh.name = 'city-ground';
+		group.add( mesh );
+
+	}
+
 	const landGeo = polygonGeometry( [ data.land ], 0, 13, 0xffffff );
 
-	const urbanMap = urbanTexture();
 	const landMat = new THREE.MeshStandardMaterial( {
 		map: urbanMap,
 		vertexColors: true,

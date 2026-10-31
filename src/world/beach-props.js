@@ -183,6 +183,21 @@ export function createBeachProps( { promenade, coastField, pointAlong, exclusion
 
 	}
 
+	// primer plano junto al punto de inicio
+	for ( let i = 0; i < 12; i ++ ) {
+
+		const t = 0.205 + i * 0.0045;
+		const p = pointAlong( promenade, t );
+		const q = coastField.query( p.x, p.z );
+		const distance = 16 + ( i % 4 ) * 3.5;
+		const x = p.x - q.nx * distance + ( ( i % 3 ) - 1 ) * 4.5;
+		const z = p.z - q.nz * distance + ( ( i % 5 ) - 2 ) * 2.2;
+		if ( ! free( x, z, 2.2 ) ) continue;
+		umbrellas.push( { x, z, r: i * 0.9 } );
+		towels.push( { x: x + 1.2, z: z + 0.8, r: i * 0.7 } );
+
+	}
+
 	const poleGeo = new THREE.CylinderGeometry( 0.045, 0.055, 2.5, 6 );
 	const poleMat = new THREE.MeshStandardMaterial( { color: 0x8a6a4a, roughness: 0.9 } );
 	const poleMesh = new THREE.InstancedMesh( poleGeo, poleMat, umbrellas.length );
