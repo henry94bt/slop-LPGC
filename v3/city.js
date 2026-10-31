@@ -1,4 +1,4 @@
-﻿import * as THREE from 'three/webgpu';
+import * as THREE from 'three/webgpu';
 import { pass, vec4 } from 'three/tsl';
 import { LightingSystem } from './lib/lighting.js';
 import { createPostProcessing } from './lib/post-processing.js';
@@ -11,6 +11,7 @@ import {
 import { createBuildingFootprints } from './lib/building-footprints.js';
 import { CITY } from './city-data.js';
 import { buildCityLife } from './city-life.js';
+import { addCityBrands } from './city-brands.js';
 
 const canvas = document.getElementById( 'scene' );
 const loading = document.getElementById( 'loading' );
@@ -283,6 +284,9 @@ async function main() {
 	const life = buildCityLife( CITY.roads );
 	scene.add( life.group );
 
+	status.textContent = 'Creatividades de HBTDATA y AbretuSobre…';
+	const brands = addCityBrands( scene, camera );
+
 	const scenePass = pass( scene, camera );
 	const sceneColor = scenePass.getTextureNode( 'output' );
 	const colorGrade = createPostProcessing( renderer, sceneColor, vec4( 0, 0, 0, 1 ) );
@@ -355,7 +359,7 @@ async function main() {
 	} );
 
 	console.log( 'street life', JSON.stringify( life.counts ) );
-	window.__CIUDAD__ = { scene, camera, renderer, CITY, lighting, life };
+	window.__CIUDAD__ = { scene, camera, renderer, CITY, lighting, life, brands };
 
 }
 

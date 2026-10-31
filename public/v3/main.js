@@ -282,6 +282,31 @@ async function main() {
 	farBuildings.receiveShadow = true;
 	scene.add( farBuildings );
 
+	// ---------- creatividades reales de HBTDATA y AbretuSobre.es ----------
+
+	const brandLoader = new THREE.TextureLoader();
+	const brandTexture = path => {
+
+		const texture = brandLoader.load( path );
+		texture.colorSpace = THREE.SRGBColorSpace;
+		texture.anisotropy = 8;
+		return texture;
+
+	};
+	const brandHbt = brandTexture( './assets/hbtdata_banner.png' );
+	const brandHbtLight = brandTexture( './assets/hbtdata_banner_light.png' );
+	const brandAbretu = brandTexture( './assets/abretu_og.png' );
+
+	addFacadePanel( scene, brandHbt, 7.4, 1.85, 13.42, 5.4, - 15, - Math.PI / 2, 0.24 );
+	addFacadePanel( scene, brandAbretu, 5.7, 2.99, - 13.42, 5.2, 8, Math.PI / 2, 0.2 );
+	addFacadePanel( scene, brandAbretu, 5.7, 2.99, - 13.42, 5.2, - 30, Math.PI / 2, 0.2 );
+	addFacadePanel( scene, brandHbt, 6.4, 1.6, 13.42, 5.2, 21, - Math.PI / 2, 0.24 );
+	addFacadePanel( scene, brandHbt, 8.2, 2.05, 0, 10.5, - 124, 0, 0.22 );
+
+	addLightbox( scene, brandHbt, 3.25, 0.81, 11.85, 2.25, 8, - Math.PI / 2 );
+	addLightbox( scene, brandAbretu, 3.0, 1.58, - 11.85, 2.35, 20, Math.PI / 2 );
+	addLightbox( scene, brandAbretu, 3.0, 1.58, - 11.85, 2.35, - 38, Math.PI / 2 );
+
 	// ---------- acera: farolas, árboles, coches, gente ----------
 
 	const poleMat = new THREE.MeshStandardNodeMaterial( { color: 0x20282b, roughness: 0.42, metalness: 0.75 } );
@@ -609,6 +634,79 @@ function makePerson( color ) {
 	legs.castShadow = true;
 	group.add( legs );
 	return group;
+
+}
+
+function brandMaterial( texture, glow ) {
+
+	return new THREE.MeshStandardNodeMaterial( {
+		map: texture,
+		emissive: 0xffffff,
+		emissiveMap: texture,
+		emissiveIntensity: glow,
+		roughness: 0.42,
+		metalness: 0.08
+	} );
+
+}
+
+function addFacadePanel( scene, texture, width, height, x, y, z, yaw, glow = 0.22 ) {
+
+	const group = new THREE.Group();
+	group.position.set( x, y, z );
+	group.rotation.y = yaw;
+
+	const backing = new THREE.Mesh(
+		new THREE.BoxGeometry( width + 0.34, height + 0.34, 0.16 ),
+		new THREE.MeshStandardNodeMaterial( { color: 0x202627, roughness: 0.45, metalness: 0.65 } )
+	);
+	group.add( backing );
+
+	const face = new THREE.Mesh( new THREE.PlaneGeometry( width, height ), brandMaterial( texture, glow ) );
+	face.position.z = 0.09;
+	group.add( face );
+
+	const faceBack = new THREE.Mesh( face.geometry, face.material );
+	faceBack.position.z = - 0.09;
+	faceBack.rotation.y = Math.PI;
+	group.add( faceBack );
+	scene.add( group );
+
+}
+
+function addLightbox( scene, texture, width, height, x, y, z, yaw ) {
+
+	const group = new THREE.Group();
+	group.position.set( x, 0.12, z );
+	group.rotation.y = yaw;
+
+	const postMat = new THREE.MeshStandardNodeMaterial( { color: 0x333b3c, roughness: 0.32, metalness: 0.8 } );
+	const postGeo = new THREE.BoxGeometry( 0.1, y - height / 2, 0.1 );
+	for ( const px of [ - width / 2 + 0.18, width / 2 - 0.18 ] ) {
+
+		const post = new THREE.Mesh( postGeo, postMat );
+		post.position.set( px, ( y - height / 2 ) / 2, 0 );
+		post.castShadow = true;
+		group.add( post );
+
+	}
+
+	const backing = new THREE.Mesh(
+		new THREE.BoxGeometry( width + 0.28, height + 0.28, 0.18 ),
+		new THREE.MeshStandardNodeMaterial( { color: 0x202627, roughness: 0.4, metalness: 0.7 } )
+	);
+	backing.position.y = y;
+	backing.castShadow = true;
+	group.add( backing );
+
+	const face = new THREE.Mesh( new THREE.PlaneGeometry( width, height ), brandMaterial( texture, 0.32 ) );
+	face.position.set( 0, y, 0.1 );
+	group.add( face );
+	const faceBack = new THREE.Mesh( face.geometry, face.material );
+	faceBack.position.set( 0, y, - 0.1 );
+	faceBack.rotation.y = Math.PI;
+	group.add( faceBack );
+	scene.add( group );
 
 }
 

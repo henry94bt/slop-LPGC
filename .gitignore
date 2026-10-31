@@ -13,3 +13,5 @@ v3/shot*.png
 tools/v3-check.mjs
 tools/nyc-check.mjs
 tools/serve-ref.mjs
+v3/*.png
+tools/city-debug.mjs
