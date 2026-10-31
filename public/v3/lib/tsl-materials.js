@@ -1,4 +1,4 @@
-import * as THREE from 'three/webgpu';
+﻿import * as THREE from 'three/webgpu';
 import {
   Fn,
   float,
@@ -161,7 +161,7 @@ const boxCoverage = Fn(([x, a, b, s]) => {
   return clamp(min(xv.add(sv), b).sub(max(xv.sub(sv), a)).div(sv.mul(2.0)), 0.0, 1.0);
 });
 
-// Keep distant lit windows in 1–2 pixel clusters. Adjacent world-anchored scales cross-fade, and
+// Keep distant lit windows in 1â€“2 pixel clusters. Adjacent world-anchored scales cross-fade, and
 // the half-width inset leaves room for filtering at cell edges while preserving mean brightness.
 const distantWindowLight = Fn(([grid, fw, probability, seed, lod]) => {
   const light = float(probability).toVar();
@@ -219,7 +219,7 @@ const facadeAlongZ = varying(
  * Modelled directly after `interior()` in `three/addons/generators/city/SkyscraperGenerator.js`:
  * - Evaluates `origin`, `dir`, `boxMin`, and `boxMax` in true world meters (isotropic 1:1:1 scale)
  *   so 3D room perspective is accurate from all viewing angles.
- * - Each apartment room spans 2.5 window bays wide (~6.8m) × 1 story tall (~3.5m) × ~5.2m deep,
+ * - Each apartment room spans 2.5 window bays wide (~6.8m) Ã— 1 story tall (~3.5m) Ã— ~5.2m deep,
  *   set back behind the facade so neighbouring windows look into the same full-sized room.
  * - Includes left & right fabric drapes hung just inside the window frame (`winUV`) from a 6-swatch
  *   domestic palette that block interior glow (`emit = 0.20`) so drapes silhouette against lit rooms.
@@ -260,7 +260,7 @@ const evaluateApartmentInterior = Fn(([uCoord, vCoord, winUV, cellId, winWNode, 
   const originY = wUV.y.sub(0.46).mul(roomH.mul(0.62)).toVar();
 
   // View ray `dir` in world meters in the room's (across, up, depth) frame. `across` runs along the wall's tangent
-  // (+x on walls facing ±z, +z on walls facing ±x, turning with walls that follow a non-grid street)
+  // (+x on walls facing Â±z, +z on walls facing Â±x, turning with walls that follow a non-grid street)
   const rayWorld = normalize(positionWorld.sub(cameraPosition)).toVar();
   const tSign = mix(sign(facadeWorldNormal.z).negate(), sign(facadeWorldNormal.x), facadeAlongZ);
   const dirX = dot(rayWorld, vec3(facadeWorldNormal.z.negate(), 0.0, facadeWorldNormal.x).mul(tSign)).toVar();
@@ -483,8 +483,8 @@ let _storefrontSignTexture;
 
 function getStorefrontSignTexture() {
   if (_storefrontSignTexture) return _storefrontSignTexture;
-  const labels = ['CORNER MARKET', 'COFFEE & BAKERY', 'BOOKS & RECORDS', 'NEIGHBORHOOD DELI',
-    'CLEANERS', 'FLOWERS', 'HARDWARE', 'PIZZA'];
+  const labels = ['BODEGÓN', 'PANADERÍA', 'FARMACIA', 'GUAGUAS',
+    'GOFIO', 'MOJO PICÓN', 'ABRETUSOBRE', 'PELUQUERÍA'];
   const canvas = document.createElement('canvas');
   canvas.width = canvas.height = 512;
   const ctx = canvas.getContext('2d');
@@ -2294,7 +2294,7 @@ function createBillboardCanvasTexture(themeKey) {
   const ctx = c.getContext('2d');
 
   if (themeKey === 0) {
-    // Theme 0: Broadway Musical Marquee ("PHANTOM OF MANHATTAN · MAJESTIC THEATRE")
+    // Theme 0: Broadway Musical Marquee ("PHANTOM OF MANHATTAN Â· MAJESTIC THEATRE")
     const grad = ctx.createLinearGradient(0, 0, 512, 256);
     grad.addColorStop(0, '#2a0412');
     grad.addColorStop(0.5, '#580a22');
@@ -2320,7 +2320,7 @@ function createBillboardCanvasTexture(themeKey) {
     ctx.fillStyle = '#ffdf78';
     ctx.font = '800 18px Inter, Arial, sans-serif';
     ctx.textAlign = 'center';
-    ctx.fillText('★  BROADWAY MUSICAL SPECTACULAR  ★', 256, 46);
+    ctx.fillText('â˜…  BROADWAY MUSICAL SPECTACULAR  â˜…', 256, 46);
 
     ctx.fillStyle = '#ffffff';
     ctx.font = '900 44px Inter, Arial, sans-serif';
@@ -2338,11 +2338,11 @@ function createBillboardCanvasTexture(themeKey) {
 
     ctx.fillStyle = '#fff3c4';
     ctx.font = '800 20px Inter, Arial, sans-serif';
-    ctx.fillText('★★★★★  "UNFORGETTABLE!" — NY TIMES', 256, 185);
+    ctx.fillText('â˜…â˜…â˜…â˜…â˜…  "UNFORGETTABLE!" â€” NY TIMES', 256, 185);
 
     ctx.fillStyle = '#ffae42';
     ctx.font = '700 16px JetBrains Mono, monospace';
-    ctx.fillText('MAJESTIC THEATRE · 44TH ST WEST · TONIGHT 8 PM', 256, 226);
+    ctx.fillText('MAJESTIC THEATRE Â· 44TH ST WEST Â· TONIGHT 8 PM', 256, 226);
   } else if (themeKey === 1) {
     // Theme 1: NASDAQ / Wall St MarketSite Financial Display
     const grad = ctx.createLinearGradient(0, 0, 0, 256);
@@ -2367,11 +2367,11 @@ function createBillboardCanvasTexture(themeKey) {
     ctx.fillStyle = '#ffffff';
     ctx.font = '900 24px Inter, Arial, sans-serif';
     ctx.textAlign = 'left';
-    ctx.fillText('NASDAQ · TIMES SQ MARKETSITE', 18, 31);
+    ctx.fillText('NASDAQ Â· TIMES SQ MARKETSITE', 18, 31);
     ctx.fillStyle = '#00f5a0';
     ctx.textAlign = 'right';
     ctx.font = '800 20px JetBrains Mono, monospace';
-    ctx.fillText('LIVE ▲ +2.84%', 494, 31);
+    ctx.fillText('LIVE â–² +2.84%', 494, 31);
 
     // Bullish emerald chart area & line
     const pts = [
@@ -2404,7 +2404,7 @@ function createBillboardCanvasTexture(themeKey) {
     ctx.fillStyle = '#38d8ff';
     ctx.font = '800 20px JetBrains Mono, monospace';
     ctx.textAlign = 'center';
-    ctx.fillText('NDX 21,490 ▲   SPX 6,145 ▲   DOW 44,880 ▲   NYC 100 ▲', 256, 238);
+    ctx.fillText('NDX 21,490 â–²   SPX 6,145 â–²   DOW 44,880 â–²   NYC 100 â–²', 256, 238);
   } else if (themeKey === 2) {
     // Theme 2: Gotham Cola / Iconic Red & White Wave Billboard
     const grad = ctx.createLinearGradient(0, 0, 512, 256);
@@ -2427,7 +2427,7 @@ function createBillboardCanvasTexture(themeKey) {
     ctx.fillStyle = '#ffe082';
     ctx.font = '800 18px Inter, Arial, sans-serif';
     ctx.textAlign = 'center';
-    ctx.fillText('ICE COLD · EST. 1898 · NEW YORK', 256, 48);
+    ctx.fillText('ICE COLD Â· EST. 1898 Â· NEW YORK', 256, 48);
 
     ctx.fillStyle = '#ffffff';
     ctx.font = 'italic 900 54px Georgia, serif';
@@ -2441,7 +2441,7 @@ function createBillboardCanvasTexture(themeKey) {
     ctx.font = '700 17px JetBrains Mono, monospace';
     ctx.fillText('REFRESHING TIMES SQUARE 24 HOURS A DAY', 256, 236);
   } else if (themeKey === 3) {
-    // Theme 3: Fifth Avenue Luxury Watch & Couture ("CHRONO GENÈVE")
+    // Theme 3: Fifth Avenue Luxury Watch & Couture ("CHRONO GENÃˆVE")
     const grad = ctx.createRadialGradient(256, 128, 16, 256, 128, 260);
     grad.addColorStop(0, '#2c2218');
     grad.addColorStop(1, '#0c0908');
@@ -2486,11 +2486,11 @@ function createBillboardCanvasTexture(themeKey) {
     ctx.fillStyle = '#f5d97e';
     ctx.textAlign = 'center';
     ctx.font = '800 16px Inter, Arial, sans-serif';
-    ctx.fillText('SWISS MANUFACTURE · SINCE 1884', 345, 66);
+    ctx.fillText('SWISS MANUFACTURE Â· SINCE 1884', 345, 66);
 
     ctx.fillStyle = '#ffffff';
     ctx.font = '900 38px Georgia, serif';
-    ctx.fillText('CHRONO GENÈVE', 345, 114);
+    ctx.fillText('CHRONO GENÃˆVE', 345, 114);
 
     ctx.fillStyle = '#e5c158';
     ctx.font = '700 22px Inter, Arial, sans-serif';
@@ -2498,7 +2498,7 @@ function createBillboardCanvasTexture(themeKey) {
 
     ctx.fillStyle = '#c8b89a';
     ctx.font = '600 16px JetBrains Mono, monospace';
-    ctx.fillText('5TH AVE AT 57TH ST · NEW YORK', 345, 202);
+    ctx.fillText('5TH AVE AT 57TH ST Â· NEW YORK', 345, 202);
   } else if (themeKey === 4) {
     // Theme 4: NY1 Live Skyline News & Weather Broadcast
     const grad = ctx.createLinearGradient(0, 0, 512, 200);
@@ -2513,12 +2513,12 @@ function createBillboardCanvasTexture(themeKey) {
     ctx.fillStyle = '#38b6ff';
     ctx.font = '900 26px Inter, Arial, sans-serif';
     ctx.textAlign = 'left';
-    ctx.fillText('NY1 NEWS · LIVE MANHATTAN', 18, 33);
+    ctx.fillText('NY1 NEWS Â· LIVE MANHATTAN', 18, 33);
 
     ctx.fillStyle = '#ffd15c';
     ctx.textAlign = 'right';
     ctx.font = '800 22px JetBrains Mono, monospace';
-    ctx.fillText('NYC 72°F ☀', 492, 33);
+    ctx.fillText('NYC 72Â°F â˜€', 492, 33);
 
     // Center headline graphic
     ctx.fillStyle = '#ffffff';
@@ -2545,7 +2545,7 @@ function createBillboardCanvasTexture(themeKey) {
     ctx.fillText('EXPRESS: 5TH AVE & BROADWAY CLEAR', 20, 220);
     ctx.fillStyle = '#c8102e';
     ctx.font = '800 16px JetBrains Mono, monospace';
-    ctx.fillText('LIVE HD · EMPIRE STATE · CHRYSLER · ONE WTC · CENTRAL PARK', 20, 244);
+    ctx.fillText('LIVE HD Â· EMPIRE STATE Â· CHRYSLER Â· ONE WTC Â· CENTRAL PARK', 20, 244);
   } else {
     // Theme 5: Times Square Neon Nights & TKTS Booth
     const grad = ctx.createLinearGradient(0, 0, 512, 256);
@@ -2587,7 +2587,7 @@ function createBillboardCanvasTexture(themeKey) {
     ctx.fillRect(0, 198, 512, 58);
     ctx.fillStyle = '#ff4081';
     ctx.font = '900 24px JetBrains Mono, monospace';
-    ctx.fillText('TKTS · 50% OFF BROADWAY SHOWS TONIGHT', 256, 234);
+    ctx.fillText('TKTS Â· 50% OFF BROADWAY SHOWS TONIGHT', 256, 234);
   }
 
   const tex = new THREE.CanvasTexture(c);
@@ -2636,7 +2636,7 @@ function createBillboardMaterial(themeIndex = 0) {
 
 /**
  * Tileable wind-wave texture shared by every water surface, synthesised once on the CPU: a random-phase directional
- * wind-sea spectrum (k^-4 saturation range above a spectral peak, cos² spreading) inverse-FFT'd to height & slopes.
+ * wind-sea spectrum (k^-4 saturation range above a spectral peak, cosÂ² spreading) inverse-FFT'd to height & slopes.
  * RGBA half-float: R,G = slope (dh/du, dh/dv in tile units, unit RMS), B = squared slope, A = height (unit RMS).
  * The box-filtered mip chain is averaged in float, so trilinear / anisotropic sampling returns the mean slope AND the
  * mean squared slope over each pixel footprint: their difference is the slope variance of waves too small to resolve,
@@ -2731,7 +2731,7 @@ function getWaterWaveTexture() {
       const aIm = (gIm[i] - gIm[m]) * amp;
       hRe[i] = aRe;
       hIm[i] = aIm;
-      sRe[i] = -kx * aIm - ky * aRe; // FFT⁻¹(i·kx·H − ky·H) = dh/du + i·dh/dv (up to 2π, normalised below)
+      sRe[i] = -kx * aIm - ky * aRe; // FFTâ»Â¹(iÂ·kxÂ·H âˆ’ kyÂ·H) = dh/du + iÂ·dh/dv (up to 2Ï€, normalised below)
       sIm[i] = kx * aRe - ky * aIm;
     }
   }
@@ -2860,14 +2860,14 @@ function createWaterMaterial() {
   const waterNormal = normalize(mix(normalWorldGeometry, vec3(slope.x.negate(), 1.0, slope.y.negate()), flatTop));
   mat.normalNode = cameraViewMatrix.transformDirection(waterNormal);
 
-  // GGX alpha ≈ RMS slope of the unresolved waves (Beckmann m), roughness = sqrt(alpha); murkier ponds a touch duller
+  // GGX alpha â‰ˆ RMS slope of the unresolved waves (Beckmann m), roughness = sqrt(alpha); murkier ponds a touch duller
   mat.roughnessNode = clamp(pow(variance, 0.25).add(pond.mul(0.05)), 0.08, 0.65);
 
   const viewDir = normalize(cameraPosition.sub(positionWorld));
   const fresnel = pow(float(1.0).sub(clamp(dot(waterNormal, viewDir), 0.0, 1.0)), 5.0).mul(0.98).add(0.02);
   mat.metalnessNode = clamp(fresnel.mul(1.6), 0.0, 0.9);
 
-  // Sediment-laden estuary: deep blue-green grey ↔ silty olive grey; thin sunlit crests transmit a greener tint
+  // Sediment-laden estuary: deep blue-green grey â†” silty olive grey; thin sunlit crests transmit a greener tint
   mat.colorNode = Fn(() => {
     const silt = noise2D(positionWorld.xz.mul(0.0031).add(7.3));
     const body = mix(color(0x162d2c), color(0x2e3f36), smoothstep(0.25, 0.85, silt));
@@ -2995,14 +2995,14 @@ function createWaterMaterial() {
         const S = mix(mix(mix(float(30.0), float(120.0), max(jerseyCity, lic)), manhattanS, onIsland), float(120.0), lake);
         const brightness = mix(mix(float(0.6), float(1.0), onIsland), float(0.8), lake);
 
-        // Footprint on the facades (m): unresolved slopes tilt the reflection ±2σ, laterally foreshortened at grazing views
+        // Footprint on the facades (m): unresolved slopes tilt the reflection Â±2Ïƒ, laterally foreshortened at grazing views
         const sigma2 = sqrt(variance).mul(2.0);
         const fwH = tHit.mul(fwTanEl).add(abs(tanEl).mul(fwPSum));
         const fwU = fwPSum.add(tHit.mul(fwDirSum));
         const sV = tHit.mul(sigma2).add(fwH).add(0.5).toVar();
         const sU = tHit.mul(sigma2).mul(max(viewDir.y, 0.05)).add(fwU).add(0.3).toVar();
 
-        // Lots 24 m wide with heights 0.3–1.3× the district skyline (averaged once a footprint spans several lots)
+        // Lots 24 m wide with heights 0.3â€“1.3Ã— the district skyline (averaged once a footprint spans several lots)
         const lot = floor(u.div(24.0));
         const r1 = hash2D(vec2(lot, 5.1));
         const r2 = hash2D(vec2(lot, 9.7));
@@ -3011,7 +3011,7 @@ function createWaterMaterial() {
         const upper = mix(boxCoverage(hRefl, 4.5, S.mul(r1.mul(r1).add(0.3)), sV), boxCoverage(hRefl, 4.5, S.mul(0.63), sV), lotMix);
         const ground = boxCoverage(hRefl, 0.0, 4.5, sV);
 
-        // Lit windows (3.2 m bays × 3.6 m floors), resolving to each lot's mean occupancy, then the street's
+        // Lit windows (3.2 m bays Ã— 3.6 m floors), resolving to each lot's mean occupancy, then the street's
         const dens = mix(float(0.2), float(0.6), r2);
         const bayF = u.div(3.2);
         const floorF = hRefl.div(3.6);
@@ -3410,3 +3410,4 @@ export {
   createContactShadowMaterial,
   createCarFlareMaterial
 };
+
